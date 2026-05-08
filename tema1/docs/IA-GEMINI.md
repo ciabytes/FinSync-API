@@ -16,7 +16,7 @@ Em resumo:
 - Modelo configurado: `gemini-2.5-flash`.
 - Endpoint de IA: `POST /api/ai/insights`.
 - RAG simples usando os dados financeiros cadastrados no proprio sistema.
-- Banco em memoria H2 para facilitar a demo.
+- Banco PostgreSQL configurado via Supabase.
 
 ## Como o RAG funciona aqui
 
@@ -46,20 +46,20 @@ Configuracao usada:
 
 ```properties
 spring.ai.model.chat=google-genai
-spring.ai.google.genai.api-key=${GEMINI_API_KEY:chave-da-demo}
+spring.ai.google.genai.api-key=${GOOGLE_API_KEY}
 spring.ai.google.genai.chat.options.model=gemini-2.5-flash
 spring.ai.google.genai.chat.options.temperature=0.3
 ```
 
-O trecho `${GEMINI_API_KEY:chave-da-demo}` significa:
+O trecho `${GOOGLE_API_KEY}` significa:
 
-- Se existir uma variavel de ambiente chamada `GEMINI_API_KEY`, a API usa ela.
-- Se nao existir, usa a chave colocada depois dos dois pontos.
+- A API espera uma variavel de ambiente chamada `GOOGLE_API_KEY`.
+- Se ela nao existir, a aplicacao nao deve conseguir chamar o Gemini corretamente.
 
-Para demo de hackathon isso ajuda a rodar rapido. Depois, o ideal e remover a chave do arquivo e deixar apenas:
+Evite gravar chaves reais no repositorio. Mantenha apenas:
 
 ```properties
-spring.ai.google.genai.api-key=${GEMINI_API_KEY}
+spring.ai.google.genai.api-key=${GOOGLE_API_KEY}
 ```
 
 ### Servico de IA
@@ -67,7 +67,7 @@ spring.ai.google.genai.api-key=${GEMINI_API_KEY}
 Arquivo:
 
 ```text
-src/main/java/com/financas/tema1/ai/FinancialAiService.java
+src/main/java/com/financas/tema1/service/FinancialAiService.java
 ```
 
 Responsavel por:
@@ -82,7 +82,7 @@ Responsavel por:
 Arquivo:
 
 ```text
-src/main/java/com/financas/tema1/ai/FinancialAiController.java
+src/main/java/com/financas/tema1/controller/FinancialAiController.java
 ```
 
 Cria o endpoint:
@@ -96,8 +96,8 @@ POST /api/ai/insights
 Arquivos:
 
 ```text
-src/main/java/com/financas/tema1/transaction/FinancialTransaction.java
-src/main/java/com/financas/tema1/transaction/FinancialTransactionRepository.java
+src/main/java/com/financas/tema1/domain/Transaction.java
+src/main/java/com/financas/tema1/repository/TransactionRepository.java
 src/main/java/com/financas/tema1/transaction/FinancialTransactionController.java
 src/main/java/com/financas/tema1/transaction/TransactionType.java
 ```

@@ -76,7 +76,10 @@ src/main/java/com/financas/tema1/
 No arquivo `src/main/resources/application.properties`, configure sua chave da API:
 
 ```properties
-spring.ai.vertex.ai.gemini.api-key=SUA_CHAVE_AQUI
+spring.ai.model.chat=google-genai
+spring.ai.google.genai.api-key=${GOOGLE_API_KEY}
+spring.ai.google.genai.chat.options.model=gemini-2.5-flash
+spring.ai.google.genai.chat.options.temperature=0.3
 ```
 
 ### Executando
